@@ -2,213 +2,136 @@
  * @Author: nniinima
  * @Date:   2020-02-16T15:33:52+02:00
  * @Last modified by:   nniinima
- * @Last modified time: 2020-02-16T22:03:07+02:00
+ * @Last modified time: 2020-02-16T23:11:54+02:00
  */
+
+
 
 #include "sudoku.h"
 
-//global sudoku problem
+int matrix[9][9];
 
+void	ft_sudoku_print(int **matrix)
+{
+	int x;
+	int y;
 
-int g_matrix[9][9] = {
-    {0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0}
-};
+	x = 0;
+	while (x < 9)
+	{
+		y = 0;
+		while (y < 9)
+		{
+			ft_putchar(matrix[x][y] + '0');
+			if (y != 8)
+				ft_putchar(' ');
+			y += 1;
+		}
+		ft_putchar('\n');
+		x += 1;
+	}
+}
 
-/**
- * @Author: nniinima
- * @Date:   2020-02-16T15:38:13+02:00
- * @Last modified by:   nniinima
- * @Last modified time: 2020-02-16T22:03:07+02:00
- */
-
-
-
-
-//Sudoku printer suite
-void ft_sudoku_print()
+int ft_check_number(int **matrix, int r, int c, int value)
 {
 	int i;
-	int n;
-	int result_matrix[9][9];
+	int j;
 
-		i=0;
-		while(i<9)
+	i = 0;
+	j = 0;
+	while (i < 9)
+	{
+		if ((matrix[i][c] == value) || (matrix[r][i] == value))
+			return (0);
+		i += 1;
+	}
+	i = 0;
+	while (i < 3)
+	{
+		j = 0;
+		while (j < 3)
 		{
-			n=0;
-			while(n<9)
-			{
-				result_matrix[i][n] = (g_matrix[i][n] + '0');
-				n++;
-			}
-			i++;
+			if (matrix[r - (r % 3) + i][c - (c % 3) + j] == value)
+				return (0);
+			j += 1;
 		}
-		i = 0;
-		while(i < 9)
-		{
-			n= 0;
-			while (n < 9)
-			{
-				write(1,&result_matrix[i][n],1);
-				n++;
-			}
-			write(1, "\n", 1);
-			i++;
-		}
+		i += 1;
+	}
+	return (1);
 }
 
-//here we check if the cells are assigned or not//
-int ft_cell_unassigned(int *row, int *col)
+int ft_backtracking_algorithm(int **matrix, int value)
 {
-    int num_unassign = 0;
-    int i;
-    int j;
+	int i;
+	int x;
+	int y;
 
-    i = 0;
-    while (i < 9)
-    {
-        j = 0;
-        while (j < 9)
-        {
-            //cell is unassigned
-            if(g_matrix[i][j] == 0)
-            {
-                //changing the values of row and col
-                *row = i;
-                *col = j;
-                //there is one or more unassigned cells
-                num_unassign = 1;
-                return num_unassign;
-            }
-            j++;
-        }
-        i++;
-    }
-    return num_unassign;
-}
-
-//number checker, can we assign a particular number or not?
-int ft_check_number(int n, int r, int c)
-{
-    int i;
-    int j;
-    int row_start;
-    int col_start;
-
-    i = 0;
-    while (i < 9)
-    {
-        //there is a cell with same value
-        if(g_matrix[r][i] == n)
-            return 0;
-        i++;
-    }
-    //checking column
-    i = 0;
-    while (i < 9)
-    {
-        //there is a cell with the value equal to i
-        if(g_matrix[i][c] == n)
-            return 0;
-        i++;
-    }
-    //checking sub g_matrix
-    row_start = (r/3)*3;
-    col_start = (c/3)*3;
-
-    i = row_start;
-    while (i < row_start + 3)
-    {
-        j = col_start;
-        while(j < col_start + 3)
-        {
-            if(g_matrix[i][j]==n)
-                return 0;
-            j++;
-        }
-        i++;
-    }
-    return 1;
-}
-
-//function to solve sudoku
-//using backtracking
-int ft_backtracking_algorithm()
-{
-    int n;
-    int i;
-    int row;
-    int col;
-    //if all cells are assigned then the sudoku is already solved
-    //pass by reference because ft_cell_unassigned will change the values of row and col
-    if(ft_cell_unassigned(&row, &col) == 0)
-        return 1;
-    //number between 1 to 9
-    i = 1;
-    while (i <= 9)
-    {
-        //if we can assign i to the cell or not
-        //the cell is g_matrix[row][col]
-        if(ft_check_number(i, row, col))
-        {
-            g_matrix[row][col] = i;
-            //backtracking
-            if(ft_backtracking_algorithm())
-                return 1;
-            //if we can't proceed with this solution
-            //reassign the cell
-            g_matrix[row][col]=0;
-        }
-        i++;
-    }
-    return 0;
-}
-
-int main(int argc, char* argv[])
-{
-	int		i;
-	int		j;
-	int		i2;
-	char	line[9][9];
 	i = 1;
-	while (i < argc)
+	x = value / 9;
+	y = value % 9;
+	if (value == 81)
+		return (1);
+	if (matrix[x][y] != 0)
+		return (ft_backtracking_algorithm(matrix, value + 1));
+	while (i < 10)
 	{
-		j = 0;
-		while (argv[i][j] != '\0')
+		if (ft_check_number(matrix, x, y, i))
 		{
-			line[i - 1][j] = argv[i][j];
-			j++;
-		}
-		i++;
-	}
-	i2 = 0;
-	while (i2 < 9)
-	{
-		j = 0;
-		while (j < 9)
-		{
-			if (line[i2][j] == '.')
-			{
-				g_matrix[i2][j] = 0;
-			}
+			matrix[x][y] = i;
+			if (ft_backtracking_algorithm(matrix, value + 1))
+				return (1);
 			else
-			{
-				g_matrix[i2][j] = (line[i2][j] - '0');
-			}
-			j++;
+				matrix[x][y] = 0;
 		}
-		i2++;
+		i += 1;
 	}
-    if (ft_backtracking_algorithm())
-        ft_sudoku_print();
-    else
-        write(1, "No solution\n", 15);
-    return 0;
+	return (0);
+}
+
+int		**read_numbers(char** argv)
+{
+	int x;
+	int y;
+	int** matrix;
+
+	x = 0;
+	matrix = (int **)malloc(sizeof(int *) * 9 + 1);
+	while (x < 9)
+	{
+		if (ft_strlen(argv[x]) != 9)
+			return (0);
+		matrix[x] = (int *)malloc(sizeof(int) * 9 + 1);
+		y = 0;
+		while (y < 9)
+		{
+			if (argv[x][y] == '.')
+				matrix[x][y] = 0;
+			else if (argv[x][y] >= '1' && argv[x][y] <= '9')
+				matrix[x][y] = argv[x][y] - '0';
+			else
+				return (0);
+			y += 1;
+		}
+		x += 1;
+	}
+	return (matrix);
+}
+
+int		main(int argc, char **argv)
+{
+	int **matrix;
+
+	if (argc == 10)
+	{
+		matrix = read_numbers(&argv[1]);
+		if (!matrix)
+			write(1, "Error\n", 6);
+		else if (ft_backtracking_algorithm(matrix, 0))
+			ft_sudoku_print(matrix);
+		else
+			write(1, "Error\n", 6);
+	}
+	else
+		write(1, "Error\n", 6);
+	return (0);
 }
