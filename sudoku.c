@@ -1,6 +1,17 @@
+/**
+ * @Author: nniinima
+ * @Date:   2020-02-16T15:33:52+02:00
+ * @Last modified by:   nniinima
+ * @Last modified time: 2020-02-16T15:46:28+02:00
+ */
+
+
+
 #include <stdio.h>
 
 //global sudoku problem
+
+
 int g_matrix[9][9] = {
     {6,5,0,8,7,3,0,9,0},
     {0,0,3,2,5,0,0,0,8},
