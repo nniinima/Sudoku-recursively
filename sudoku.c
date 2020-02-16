@@ -2,46 +2,66 @@
  * @Author: nniinima
  * @Date:   2020-02-16T15:33:52+02:00
  * @Last modified by:   nniinima
- * @Last modified time: 2020-02-16T15:46:28+02:00
+ * @Last modified time: 2020-02-16T22:03:07+02:00
  */
 
-
-
-#include <stdio.h>
+#include "sudoku.h"
 
 //global sudoku problem
 
 
 int g_matrix[9][9] = {
-    {6,5,0,8,7,3,0,9,0},
-    {0,0,3,2,5,0,0,0,8},
-    {9,8,0,1,0,4,3,5,7},
-    {1,0,5,0,0,0,0,0,0},
-    {4,0,0,0,0,0,0,0,2},
-    {0,0,0,0,0,0,5,0,3},
-    {5,7,8,3,0,1,0,2,6},
-    {2,0,0,0,4,8,9,0,0},
-    {0,9,0,6,2,5,0,8,1}
+    {0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0}
 };
+
+/**
+ * @Author: nniinima
+ * @Date:   2020-02-16T15:38:13+02:00
+ * @Last modified by:   nniinima
+ * @Last modified time: 2020-02-16T22:03:07+02:00
+ */
+
+
+
 
 //Sudoku printer suite
 void ft_sudoku_print()
 {
-    int i;
-    int j;
+	int i;
+	int n;
+	int result_matrix[9][9];
 
-    i = 0;
-    while (i < 9)
-    {
-        j = 0;
-        while (j < 9)
-        {
-            printf("%d ",g_matrix[i][j]);
-            j++;
-        }
-        printf("\n");
-        i++;
-    }
+		i=0;
+		while(i<9)
+		{
+			n=0;
+			while(n<9)
+			{
+				result_matrix[i][n] = (g_matrix[i][n] + '0');
+				n++;
+			}
+			i++;
+		}
+		i = 0;
+		while(i < 9)
+		{
+			n= 0;
+			while (n < 9)
+			{
+				write(1,&result_matrix[i][n],1);
+				n++;
+			}
+			write(1, "\n", 1);
+			i++;
+		}
 }
 
 //here we check if the cells are assigned or not//
@@ -151,11 +171,44 @@ int ft_backtracking_algorithm()
     return 0;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
+	int		i;
+	int		j;
+	int		i2;
+	char	line[9][9];
+	i = 1;
+	while (i < argc)
+	{
+		j = 0;
+		while (argv[i][j] != '\0')
+		{
+			line[i - 1][j] = argv[i][j];
+			j++;
+		}
+		i++;
+	}
+	i2 = 0;
+	while (i2 < 9)
+	{
+		j = 0;
+		while (j < 9)
+		{
+			if (line[i2][j] == '.')
+			{
+				g_matrix[i2][j] = 0;
+			}
+			else
+			{
+				g_matrix[i2][j] = (line[i2][j] - '0');
+			}
+			j++;
+		}
+		i2++;
+	}
     if (ft_backtracking_algorithm())
         ft_sudoku_print();
     else
-        printf("No solution\n");
+        write(1, "No solution\n", 15);
     return 0;
 }
