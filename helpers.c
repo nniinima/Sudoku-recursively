@@ -1,23 +1,28 @@
-/**
- * @Author: nniinima
- * @Date:   2020-02-16T23:10:21+02:00
- * @Last modified by:   nniinima
- * @Last modified time: 2020-02-16T23:14:26+02:00
- */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   helpers.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kvirolai <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/16 23:18:01 by kvirolai          #+#    #+#             */
+/*   Updated: 2020/02/16 23:21:16 by kvirolai         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "sudoku.h"
 
- void	ft_putchar(char c)
- {
- 	write(1, &c, 1);
- }
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
 
- int	ft_strlen(char *str)
- {
- 	int i;
+int		ft_strlen(char *str)
+{
+	int i;
 
- 	i = 0;
- 	while (str[i])
- 		i += 1;
- 	return (i);
- }
+	i = 0;
+	while (str[i])
+		i += 1;
+	return (i);
+}
