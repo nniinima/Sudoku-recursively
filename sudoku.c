@@ -1,15 +1,16 @@
-/**
- * @Author: nniinima
- * @Date:   2020-02-16T15:33:52+02:00
- * @Last modified by:   nniinima
- * @Last modified time: 2020-02-16T23:11:54+02:00
- */
-
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sudoku.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nniinima <nniinima@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/16 23:18:53 by nniinima          #+#    #+#             */
+/*   Updated: 2020/02/16 23:31:08 by nniinima         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "sudoku.h"
-
-int matrix[9][9];
 
 void	ft_sudoku_print(int **matrix)
 {
@@ -32,7 +33,7 @@ void	ft_sudoku_print(int **matrix)
 	}
 }
 
-int ft_check_number(int **matrix, int r, int c, int value)
+int		ft_check_number(int **matrix, int r, int c, int value)
 {
 	int i;
 	int j;
@@ -60,7 +61,7 @@ int ft_check_number(int **matrix, int r, int c, int value)
 	return (1);
 }
 
-int ft_backtracking_algorithm(int **matrix, int value)
+int		ft_backtracking_algorithm(int **matrix, int value)
 {
 	int i;
 	int x;
@@ -88,11 +89,11 @@ int ft_backtracking_algorithm(int **matrix, int value)
 	return (0);
 }
 
-int		**read_numbers(char** argv)
+int		**read_numbers(char **argv)
 {
 	int x;
 	int y;
-	int** matrix;
+	int **matrix;
 
 	x = 0;
 	matrix = (int **)malloc(sizeof(int *) * 9 + 1);

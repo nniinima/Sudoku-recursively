@@ -1,18 +1,23 @@
-/**
- * @Author: nniinima
- * @Date:   2020-02-16T15:56:34+02:00
- * @Last modified by:   nniinima
- * @Last modified time: 2020-02-16T23:13:17+02:00
- */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sudoku.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nniinima <nniinima@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/16 23:23:22 by nniinima          #+#    #+#             */
+/*   Updated: 2020/02/16 23:27:51 by nniinima         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SUDOKU_H
-#define SUDOKU_H
+# define SUDOKU_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
 
- void	ft_putchar(char);
- int	ft_strlen(char*);
-
+void	ft_putchar(char c);
+int		ft_strlen(char *str);
 
 #endif
