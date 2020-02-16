@@ -1,133 +1,127 @@
-// A Backtracking program  in C to solve Sudoku problem
 #include <stdio.h>
 
-// UNASSIGNED is used for empty cells in sudoku grid
-#define EMPTY 0
+//sudoku problem
+int matrix[9][9] = {
+    {6,5,0,8,7,3,0,9,0},
+    {0,0,3,2,5,0,0,0,8},
+    {9,8,0,1,0,4,3,5,7},
+    {1,0,5,0,0,0,0,0,0},
+    {4,0,0,0,0,0,0,0,2},
+    {0,0,0,0,0,0,5,0,3},
+    {5,7,8,3,0,1,0,2,6},
+    {2,0,0,0,4,8,9,0,0},
+    {0,9,0,6,2,5,0,8,1}
+};
 
-// N is used for the size of Sudoku grid. Size will be NxN
-#define N 9
-
-// This function finds an entry in grid that is still unassigned
-int FindUnassignedLocation(int grid[N][N], int &row, int &col);
-
-// Checks whether it will be legal to assign num to the given row, col
-int isSafe(int grid[N][N], int row, int col, int num);
-
-/* Takes a partially filled-in grid and attempts to assign values to
-  all unassigned locations in such a way to meet the requirements
-  for Sudoku solution (non-duplication across rows, columns, and boxes) */
-int SolveSudoku(int grid[N][N])
+//function to print sudoku
+void ft_sudoku_print()
 {
-    int row, col;
-
-    // If there is no unassigned location, we are done
-    if (!FindUnassignedLocation(grid, row, col))
-       return 1; // success!
-
-    // consider digits 1 to 9
-    for (int num = 1; num <= 9; num++)
+    int i,j;
+    for(i=0;i<9;i++)
     {
-        // if looks promising
-        if (isSafe(grid, row, col, num))
+        for(j=0;j<9;j++)
         {
-            // make tentative assignment
-            grid[row][col] = num;
-
-            // return, if success, yay!
-            if (SolveSudoku(grid))
-                return 1;
-
-            // failure, unmake & try again
-            grid[row][col] = 0;
+            printf("%d ",matrix[i][j]);
         }
-    }
-    return 0; // this triggers backtracking
-}
-
-/* Searches the grid to find an entry that is still unassigned. If
-   found, the reference parameters row, col will be set the location
-   that is unassigned, and true is returned. If no unassigned entries
-   remain, false is returned. */
-int FindUnassignedLocation(int grid[N][N], int &row, int &col)
-{
-    for (row = 0; row < N; row++)
-        for (col = 0; col < N; col++)
-            if (grid[row][col] == UNASSIGNED)
-                return 1;
-    return 0;
-}
-
-/* Returns a boolean which indicates whether an assigned entry
-   in the specified row matches the given number. */
-int UsedInRow(int grid[N][N], int row, int num)
-{
-    for (int col = 0; col < N; col++)
-        if (grid[row][col] == num)
-            return 1;
-    return 0;
-}
-
-/* Returns a boolean which indicates whether an assigned entry
-   in the specified column matches the given number. */
-int UsedInCol(int grid[N][N], int col, int num)
-{
-    for (int row = 0; row < N; row++)
-        if (grid[row][col] == num)
-            return 1;
-    return 0;
-}
-
-/* Returns a boolean which indicates whether an assigned entry
-   within the specified 3x3 box matches the given number. */
-int UsedInBox(int grid[N][N], int boxStartRow, int boxStartCol, int num)
-{
-    for (int row = 0; row < 3; row++)
-        for (int col = 0; col < 3; col++)
-            if (grid[row+boxStartRow][col+boxStartCol] == num)
-                return 1;
-    return 0;
-}
-
-/* Returns a boolean which indicates whether it will be legal to assign
-   num to the given row,col location. */
-int isSafe(int grid[N][N], int row, int col, int num)
-{
-    /* Check if 'num' is not already placed in current row,
-       current column and current 3x3 box */
-    return !UsedInRow(grid, row, num) &&
-           !UsedInCol(grid, col, num) &&
-           !UsedInBox(grid, row - row%3 , col - col%3, num)&&
-            grid[row][col]==EMPTY;
-}
-
-/* A utility function to print grid  */
-void printGrid(int grid[N][N])
-{
-    for (int row = 0; row < N; row++)
-    {
-       for (int col = 0; col < N; col++)
-             printf("%2d", grid[row][col]);
         printf("\n");
     }
 }
 
-/* Driver Program to test above functions */
+//function to check if all cells are assigned or not
+//if there is any unassigned cell
+//then this function will change the values of
+//row and col accordingly
+int ft_cell_unassigned(int *row, int *col)
+{
+    int num_unassign = 0;
+    int i,j;
+    for(i=0;i<9;i++)
+    {
+        for(j=0;j<9;j++)
+        {
+            //cell is unassigned
+            if(matrix[i][j] == 0)
+            {
+                //changing the values of row and col
+                *row = i;
+                *col = j;
+                //there is one or more unassigned cells
+                num_unassign = 1;
+                return num_unassign;
+            }
+        }
+    }
+    return num_unassign;
+}
+
+//function to check if we can put a
+//value in a paticular cell or not
+int ft_check_number(int n, int r, int c)
+{
+    int i,j;
+    //checking in row
+    for(i=0;i<9;i++)
+    {
+        //there is a cell with same value
+        if(matrix[r][i] == n)
+            return 0;
+    }
+    //checking column
+    for(i=0;i<9;i++)
+    {
+        //there is a cell with the value equal to i
+        if(matrix[i][c] == n)
+            return 0;
+    }
+    //checking sub matrix
+    int row_start = (r/3)*3;
+    int col_start = (c/3)*3;
+    for(i=row_start;i<row_start+3;i++)
+    {
+        for(j=col_start;j<col_start+3;j++)
+        {
+            if(matrix[i][j]==n)
+                return 0;
+        }
+    }
+    return 1;
+}
+
+//function to solve sudoku
+//using backtracking
+int ft_backtracking_algorithm()
+{
+    int row;
+    int col;
+    //if all cells are assigned then the sudoku is already solved
+    //pass by reference because ft_cell_unassigned will change the values of row and col
+    if(ft_cell_unassigned(&row, &col) == 0)
+        return 1;
+    int n,i;
+    //number between 1 to 9
+    for(i=1;i<=9;i++)
+    {
+        //if we can assign i to the cell or not
+        //the cell is matrix[row][col]
+        if(ft_check_number(i, row, col))
+        {
+            matrix[row][col] = i;
+            //backtracking
+            if(ft_backtracking_algorithm())
+                return 1;
+            //if we can't proceed with this solution
+            //reassign the cell
+            matrix[row][col]=0;
+        }
+    }
+    return 0;
+}
+
 int main()
 {
-    // 0 means unassigned cells
-    int grid[N][N] = {{3, 0, 6, 5, 0, 8, 4, 0, 0},
-                      {5, 2, 0, 0, 0, 0, 0, 0, 0},
-                      {0, 8, 7, 0, 0, 0, 0, 3, 1},
-                      {0, 0, 3, 0, 1, 0, 0, 8, 0},
-                      {9, 0, 0, 8, 6, 3, 0, 0, 5},
-                      {0, 5, 0, 0, 9, 0, 6, 0, 0},
-                      {1, 3, 0, 0, 0, 0, 2, 5, 0},
-                      {0, 0, 0, 0, 0, 0, 0, 7, 4},
-                      {0, 0, 5, 2, 0, 6, 3, 0, 0}};
-    if (SolveSudoku(grid) == 1)
-          printGrid(grid);
+    if (ft_backtracking_algorithm())
+        ft_sudoku_print();
     else
-         printf("No solution exists");
-
+        printf("No solution\n");
     return 0;
 }
